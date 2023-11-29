@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
@@ -7,23 +8,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="526.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.FenFXML_MembreBureau">
+<AnchorPane id="AnchorPane" prefHeight="526.0" prefWidth="789.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.FenFXML_MembreBureau">
     <stylesheets>
         <URL value="@fenfxml_inscription.css" />
     </stylesheets>
    <children>
-      <ComboBox id="cmb_ChoixMatricule" fx:id="cmb_ChoixMatricule" layoutX="143.0" layoutY="34.0" onAction="#handleChoixMatricule" prefWidth="150.0" />
-      <Label layoutX="14.0" layoutY="39.0" prefHeight="21.0" prefWidth="85.0" text="Matricule : " />
-      <TableView id="tableSessionsAutorisees" fx:id="tableSessionsAutorisees" layoutX="12.0" layoutY="158.0" prefHeight="201.0" prefWidth="583.0">
+      <Label layoutX="276.0" layoutY="42.0" prefHeight="35.0" prefWidth="237.0" text="Membres du bureau :">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <Label id="lblNomClient" fx:id="lblNomClient" layoutX="14.0" layoutY="126.0" prefHeight="21.0" prefWidth="528.0" />
+      <TableView id="tableMembreBureau" fx:id="tableMembreBureau" layoutX="24.0" layoutY="120.0" prefHeight="190.0" prefWidth="742.0">
         <columns>
-          <TableColumn id="colonneId" fx:id="colonneId" prefWidth="95.0" text="id" />
-          <TableColumn id="colonneFormation_id" fx:id="colonneFormation_id" prefWidth="123.0" text="formation" />
-            <TableColumn id="colonneDate_debut" fx:id="colonneDate_debut" prefWidth="148.0" text="date début" />
-            <TableColumn id="colonneNb_places" fx:id="colonneNb_places" prefWidth="109.0" text="nb places" />
-            <TableColumn id="colonneNb_inscrits" fx:id="colonneNb_inscrits" prefWidth="105.0" text="nb inscrits" />
+          <TableColumn id="tblCid" fx:id="tblCid" prefWidth="75.0" text="ID" />
+          <TableColumn id="tblCfonction" fx:id="tblCfonction" prefWidth="75.0" text="Fonction" />
+            <TableColumn id="tblCnom" fx:id="tblCnom" prefWidth="75.0" text="Nom" />
+            <TableColumn id="tblCprenom" fx:id="tblCprenom" prefWidth="75.0" text="Prénom" />
+            <TableColumn id="tblCadresse" fx:id="tblCadresse" prefWidth="75.0" text="Adresse" />
+            <TableColumn id="tblCcp" fx:id="tblCcp" prefWidth="81.0" text="CP" />
+            <TableColumn id="tblCville" fx:id="tblCville" prefWidth="87.0" text="Ville" />
+            <TableColumn id="tblCemail" fx:id="tblCemail" prefWidth="93.0" text="Email" />
+            <TableColumn id="tblCportable" fx:id="tblCportable" prefWidth="105.0" text="Portable" />
         </columns>
       </TableView>
-      <Label id="lblNomClient" fx:id="lblNomClient" layoutX="14.0" layoutY="126.0" prefHeight="21.0" prefWidth="528.0" />
-      <Button id="btnInscription" fx:id="btnInscription" layoutX="14.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleInscription" prefHeight="60.0" prefWidth="577.0" text="INSCRIPTION A LA SESSION SELECTIONNEE" visible="false" />
+      <Button id="btnModifBureau" fx:id="btnModifBureau" layoutX="93.0" layoutY="388.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Modifier" />
+      <Button id="btnInsertBureau" fx:id="btnInsertBureau" layoutX="345.0" layoutY="388.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Insérer" />
+      <Button id="btnSupprBureau" fx:id="btnSupprBureau" layoutX="596.0" layoutY="388.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Supprimer" />
    </children>
 </AnchorPane>

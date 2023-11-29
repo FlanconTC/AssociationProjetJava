@@ -15,8 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import modele.Bureau;
-import modele.Membre;
+import modele.*;
 
 /**
  * @author Philippe
@@ -26,53 +25,32 @@ public class MainApp extends Application
     private Stage primaryStage;
     private Stage secondaryStage;
     
-    // Pour conserver la session sélectionnée dans le TableView de la fenêtre inscription
-    private static Membre maSessionSelectionne;
-    // Pour conserver le client sélectionné dans le ComboBox de la fenêtre inscription
-    private static Bureau monClientSelectionne;
-    
     @Override
     public void start(Stage primaryStage)
     {
         this.primaryStage = primaryStage;
         try
         {
-            this.primaryStage.setTitle("Gestion des inscriptions aux sessions de formations");
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/vue/FenFXML_Inscription.fxml"));
+            this.primaryStage.setTitle("Gestion de l'association");
+            
+            
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/vue/FenFXML_Menu.fxml"));
+            
+           
             AnchorPane rootLayout = (AnchorPane) loader.load();
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
         }
-        catch (IOException e)
-        {
-            System.out.println("Erreur chargement fenetre principale : " + e.getMessage());
-        }
+       catch (IOException e) {
+    System.out.println("Erreur lors du chargement de FenFXML_Menu.fxml : " + e.getMessage());
+    e.printStackTrace(); // Cela affichera la trace complète de l'exception dans la console.
+}
     }
     
-    public void creationFenConfirm()
-    {
-        
-    }
-    
+   
     // Getter et Setter pour l'item selectionné dans le tableView des sessions (fenetre Inscription)
-    public static void setMaSessionSelectionnee(Membre maSession)
-    {
-        maSessionSelectionne = maSession;
-    }
-    public static Membre getMaSessionSelectionnee()
-    {
-        return maSessionSelectionne;
-    }
-    // Getter et Setter pour l'item selectionné dans le ComboBox des clients (fenetre Inscription)
-    public static void setMonClientSelectionne(Bureau monClient)
-    {
-        monClientSelectionne = monClient;
-    }
-    public static Bureau getMonClientSelectionne()
-    {
-        return monClientSelectionne;
-    }
+   
     /**
      * @param args the command line arguments
      */
