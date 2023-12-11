@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import modele.Bureau;
 import modele.GestionSql;
 
-public class FenFXML_MembreBureauInsererController
+public class FenFXML_BureauInsertController
 {
 
     @FXML
@@ -43,10 +43,8 @@ public class FenFXML_MembreBureauInsererController
             String email = txtEmail.getText();
             String telPortable = txtTelPortable.getText();
 
-            // Create a new Bureau object with the values
             Bureau nouveauMembreBureau = new Bureau(fonction, titre, nom, prenom, adresse, cp, ville, email, telPortable);
 
-            // Call the insertion function in GestionSql
             GestionSql.insertMembreBureau(nouveauMembreBureau);
         } catch (Exception e)
         {

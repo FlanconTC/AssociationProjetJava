@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="controleur.FenFXML_MembreBureauModifController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.FenFXML_BureauInsertController">
     <children>
         <Label layoutX="211.0" layoutY="35.0" text="Modifier Membre du Bureau" />
    
@@ -14,12 +14,13 @@
         <TextField fx:id="txtTitre" layoutX="37.0" layoutY="91.0" promptText="Titre" />
         <TextField fx:id="txtNom" layoutX="347.0" layoutY="91.0" promptText="Nom" />
         <TextField fx:id="txtPrenom" layoutX="191.0" layoutY="91.0" promptText="Prenom" />
-        <TextField fx:id="txtAdresse" layoutX="37.0" layoutY="232.0" prefHeight="25.0" prefWidth="458.0" promptText="Adresse" />
-        <TextField fx:id="txtCP" layoutX="37.0" layoutY="268.0" promptText="Code Postal" />
-        <TextField fx:id="txtVille" layoutX="192.0" layoutY="268.0" prefHeight="25.0" prefWidth="303.0" promptText="Ville" />
+        <TextField fx:id="txtAdresse" layoutX="37.0" layoutY="224.0" prefHeight="25.0" prefWidth="458.0" promptText="Adresse" />
+        <TextField fx:id="txtCP" layoutX="37.0" layoutY="260.0" promptText="Code Postal" />
+        <TextField fx:id="txtVille" layoutX="192.0" layoutY="260.0" prefHeight="25.0" prefWidth="303.0" promptText="Ville" />
         <TextField fx:id="txtEmail" layoutX="37.0" layoutY="158.0" promptText="Email" />
         <TextField fx:id="txtTelPortable" layoutX="37.0" layoutY="191.0" promptText="Téléphone Portable" />
    
-        <Button layoutX="216.0" layoutY="321.0" onAction="#handleModifier" prefHeight="25.0" prefWidth="141.0" text="Modifier" />
+        <Button layoutX="223.0" layoutY="320.0" onAction="#handleEnregistrer" text="Enregistrer" />
+        <Button layoutX="307.0" layoutY="320.0" onAction="#handleAnnuler" text="Annuler" />
     </children>
 </AnchorPane>

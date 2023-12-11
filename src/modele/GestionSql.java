@@ -17,7 +17,6 @@ public class GestionSql
     static String pilote = "com.mysql.cj.jdbc.Driver";
     static String url = "jdbc:mysql://localhost/association?characterEncoding=UTF8";
 
-    //Requete permettant de retourner l'ensemble des clients
     public static ObservableList<Bureau> getMembresBureau()
     {
         Connection conn;
@@ -47,7 +46,6 @@ public class GestionSql
         return lesMembres;
     }
 
-    // Fonction pour modifier un membre dans la table "bureau"
     public static void modifierMembreBureau(Bureau membreBureau)
     {
         try
@@ -72,11 +70,9 @@ public class GestionSql
 
             if (rowsAffected > 0)
             {
-                // Affichez un message de réussite
                 showAlert("Succès", "Modification effectuer avec succès.");
             } else
             {
-                // Affichez un message d'échec si nécessaire
                 showAlert("Échec", "Modification échoué.");
             }
 
@@ -88,7 +84,6 @@ public class GestionSql
         }
     }
 
-    // Fonction pour insérer un nouveau membre dans la table "bureau"
     public static void insertMembreBureau(Bureau membreBureau)
     {
         try
@@ -112,11 +107,9 @@ public class GestionSql
 
             if (rowsAffected > 0)
             {
-                // Affichez un message de réussite
                 showAlert("Succès", "Insertion effectuer avec succès.");
             } else
             {
-                // Affichez un message d'échec si nécessaire
                 showAlert("Échec", "Insertion échoué.");
             }
 
@@ -128,7 +121,6 @@ public class GestionSql
         }
     }
 
-    // Fonction pour supprimer un membre de la table "membres"
     public static void deleteMembreBureau(int idMembre)
     {
         try
@@ -142,11 +134,9 @@ public class GestionSql
 
             if (rowsAffected > 0)
             {
-                // Affichez un message de réussite
                 showAlert("Succès", "Supprimer avec succès.");
             } else
             {
-                // Affichez un message d'échec si nécessaire
                 showAlert("Échec", "La suppression a échoué.");
             }
 
@@ -186,11 +176,9 @@ public class GestionSql
 
             if (rowsAffected > 0)
             {
-                // Affichez un message de réussite
                 showAlert("Succès", "Membre enregistré avec succès.");
             } else
             {
-                // Affichez un message d'échec si nécessaire
                 showAlert("Échec", "L'enregistrement du membre a échoué.");
             }
 

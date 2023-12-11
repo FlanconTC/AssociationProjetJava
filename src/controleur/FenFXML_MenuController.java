@@ -8,33 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import controleur.MainApp;
-import modele.*;
 
-/**
- * FXML Controller class
- *
- * @author Rabelais
- */
-public class FenFXML_MenuControleur implements Initializable
+public class FenFXML_MenuController implements Initializable
 {
-
-    private Stage secondaryStage;
-    @FXML
-    private Button btnMembres;
-
-    @FXML
-    private Button btnBureau;
-
-    @FXML
-    private Button btnRecu;
-
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
@@ -47,11 +25,11 @@ public class FenFXML_MenuControleur implements Initializable
         try
         {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/vue/FenFXML_MembreBureau.fxml"));
+            loader.setLocation(getClass().getResource("/vue/FenFXML_Bureau.fxml"));
             AnchorPane rootLayout = loader.load();
             Scene scene = new Scene(rootLayout);
             Stage newStage = new Stage();
-            newStage.setTitle("Écran gestion membres");
+            newStage.setTitle("Écran gestion bureau");
             newStage.setScene(scene);
             newStage.show();
         } catch (IOException e)
@@ -66,7 +44,7 @@ public class FenFXML_MenuControleur implements Initializable
         try
         {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/vue/FenFXML_MembreSaisie.fxml"));
+            loader.setLocation(getClass().getResource("/vue/FenFXML_Membre.fxml"));
             AnchorPane rootLayout = loader.load();
             Scene scene = new Scene(rootLayout);
             Stage newStage = new Stage();

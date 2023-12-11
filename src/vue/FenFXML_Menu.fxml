@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="334.0" prefWidth="571.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.FenFXML_MenuControleur">
+<AnchorPane id="AnchorPane" prefHeight="334.0" prefWidth="571.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.FenFXML_MenuController">
    <children>
       <Button id="btnBureau" fx:id="btnBureau" layoutX="215.0" layoutY="126.0" mnemonicParsing="false" onAction="#lancerFenetreBureau" prefHeight="34.0" prefWidth="142.0" text="Bureau" />
       <Button id="btnMembres" fx:id="btnMembres" layoutX="216.0" layoutY="187.0" mnemonicParsing="false" onAction="#lancerFenetreMembres" prefHeight="34.0" prefWidth="142.0" text="Membres" />

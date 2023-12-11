@@ -19,7 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class FenFXML_MembreBureau implements Initializable
+public class FenFXML_BureauController implements Initializable
 {
 
     @FXML
@@ -44,19 +44,10 @@ public class FenFXML_MembreBureau implements Initializable
     private TableColumn<Bureau, String> tblCportable;
     private ObservableList<Bureau> membresBureau;
 
-    @FXML
-    private Button btnModifBureau;
-    @FXML
-    private Button btnInsertBureau;
-    @FXML
-    private Button btnSupprBureau;
-
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-
         membresBureau = GestionSql.getMembresBureau();
-
         if (membresBureau != null)
         {
             tblCid.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -72,48 +63,36 @@ public class FenFXML_MembreBureau implements Initializable
         }
     }
 
-    private void updateTable()
-    {
-        membresBureau.setAll(GestionSql.getMembresBureau());
-    }
-
-// In your FenFXML_MembreBureau class
-    private void openModificationForm(Bureau selectedBureau)
-    {
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/FenFXML_MembreBureauModif.fxml"));
-            Parent root = loader.load();
-
-            // Pass the selected Bureau to the ModificationFormController
-            FenFXML_MembreBureauModifController controller = loader.getController();
-            controller.setBureau(selectedBureau);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     private void handleModifierBureau()
     {
         Bureau selectedBureau = tableMembreBureau.getSelectionModel().getSelectedItem();
         if (selectedBureau != null)
         {
-            openModificationForm(selectedBureau);
+            try
+            {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/FenFXML_BureauModif.fxml"));
+                Parent root = loader.load();
+
+                FenFXML_BureauModifController controller = loader.getController();
+                controller.setBureau(selectedBureau);
+
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
-    // Fonction pour gérer l'événement du bouton "Insérer"
-    private void openInsertionForm()
+    @FXML
+    private void handleInsererBureau()
     {
         try
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/FenFXML_MembreBureauInserer.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vue/FenFXML_BureauInsert.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -126,22 +105,13 @@ public class FenFXML_MembreBureau implements Initializable
     }
 
     @FXML
-    private void handleInsererBureau()
-    {
-        openInsertionForm();
-    }
-
-    // Fonction pour gérer l'événement du bouton "Supprimer"
-    @FXML
     private void handleSupprimerBureau()
     {
         Bureau selectedBureau = tableMembreBureau.getSelectionModel().getSelectedItem();
         if (selectedBureau != null)
         {
-            // Appeler la fonction de suppression dans GestionSql
             GestionSql.deleteMembreBureau(selectedBureau.getId());
-            // Mettre à jour le tableau
-            updateTable();
+            membresBureau.setAll(GestionSql.getMembresBureau());
         }
     }
 }

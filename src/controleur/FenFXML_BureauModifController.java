@@ -5,7 +5,7 @@ import javafx.scene.control.TextField;
 import modele.Bureau;
 import modele.GestionSql;
 
-public class FenFXML_MembreBureauModifController
+public class FenFXML_BureauModifController
 {
 
     @FXML
@@ -27,7 +27,7 @@ public class FenFXML_MembreBureauModifController
     @FXML
     private TextField txtTelPortable;
 
-    private Bureau bureau; // Selected Bureau to be modified
+    private Bureau bureau;
 
     public void setBureau(Bureau bureau)
     {
@@ -49,7 +49,6 @@ public class FenFXML_MembreBureauModifController
     @FXML
     private void handleModifier()
     {
-        // Update the selected Bureau with the modified information
         if (bureau != null)
         {
             bureau.setFonction(txtFonction.getText());
@@ -62,7 +61,6 @@ public class FenFXML_MembreBureauModifController
             bureau.setEmail(txtEmail.getText());
             bureau.setTelPortable(txtTelPortable.getText());
 
-            // Call the modification function in GestionSql
             GestionSql.modifierMembreBureau(bureau);
         }
     }
