@@ -9,30 +9,28 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="526.0" prefWidth="789.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.FenFXML_MembreBureau">
-    <stylesheets>
-        <URL value="@fenfxml_inscription.css" />
-    </stylesheets>
-   <children>
-      <Label layoutX="276.0" layoutY="42.0" prefHeight="35.0" prefWidth="237.0" text="Membres du bureau :">
-         <font>
-            <Font size="24.0" />
-         </font></Label>
-      <Label id="lblNomClient" fx:id="lblNomClient" layoutX="14.0" layoutY="126.0" prefHeight="21.0" prefWidth="528.0" />
-      <TableView id="tableMembreBureau" fx:id="tableMembreBureau" layoutX="24.0" layoutY="120.0" prefHeight="190.0" prefWidth="742.0">
-        <columns>
-          <TableColumn id="tblCid" fx:id="tblCid" prefWidth="75.0" text="ID" />
-          <TableColumn id="tblCfonction" fx:id="tblCfonction" prefWidth="75.0" text="Fonction" />
-            <TableColumn id="tblCnom" fx:id="tblCnom" prefWidth="75.0" text="Nom" />
-            <TableColumn id="tblCprenom" fx:id="tblCprenom" prefWidth="75.0" text="Prénom" />
-            <TableColumn id="tblCadresse" fx:id="tblCadresse" prefWidth="75.0" text="Adresse" />
-            <TableColumn id="tblCcp" fx:id="tblCcp" prefWidth="81.0" text="CP" />
-            <TableColumn id="tblCville" fx:id="tblCville" prefWidth="87.0" text="Ville" />
-            <TableColumn id="tblCemail" fx:id="tblCemail" prefWidth="93.0" text="Email" />
-            <TableColumn id="tblCportable" fx:id="tblCportable" prefWidth="105.0" text="Portable" />
-        </columns>
-      </TableView>
-      <Button id="btnModifBureau" fx:id="btnModifBureau" layoutX="93.0" layoutY="388.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Modifier" />
-      <Button id="btnInsertBureau" fx:id="btnInsertBureau" layoutX="345.0" layoutY="388.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Insérer" />
-      <Button id="btnSupprBureau" fx:id="btnSupprBureau" layoutX="596.0" layoutY="388.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Supprimer" />
-   </children>
+    <children>
+        <Label layoutX="276.0" layoutY="42.0" prefHeight="35.0" prefWidth="237.0" text="Membres du bureau :">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Label id="lblNomClient" fx:id="lblNomClient" layoutX="14.0" layoutY="126.0" prefHeight="21.0" prefWidth="528.0" />
+        <TableView id="tableMembreBureau" fx:id="tableMembreBureau" layoutX="24.0" layoutY="120.0" prefHeight="190.0" prefWidth="742.0">
+            <columns>
+                <TableColumn id="tblCid" fx:id="tblCid" prefWidth="75.0" text="ID" />
+                <TableColumn id="tblCfonction" fx:id="tblCfonction" prefWidth="75.0" text="Fonction" />
+                <TableColumn id="tblCnom" fx:id="tblCnom" prefWidth="75.0" text="Nom" />
+                <TableColumn id="tblCprenom" fx:id="tblCprenom" prefWidth="75.0" text="Prénom" />
+                <TableColumn id="tblCadresse" fx:id="tblCadresse" prefWidth="75.0" text="Adresse" />
+                <TableColumn id="tblCcp" fx:id="tblCcp" prefWidth="81.0" text="CP" />
+                <TableColumn id="tblCville" fx:id="tblCville" prefWidth="87.0" text="Ville" />
+                <TableColumn id="tblCemail" fx:id="tblCemail" prefWidth="93.0" text="Email" />
+                <TableColumn id="tblCportable" fx:id="tblCportable" prefWidth="105.0" text="Portable" />
+            </columns>
+        </TableView>
+        <Button id="btnModifBureau" fx:id="btnModifBureau" layoutX="93.0" layoutY="388.0" mnemonicParsing="false" onAction="#handleModifierBureau" prefHeight="35.0" prefWidth="101.0" text="Modifier" />
+        <Button id="btnInsertBureau" fx:id="btnInsertBureau" layoutX="345.0" layoutY="388.0" mnemonicParsing="false" onAction="#handleInsererBureau" prefHeight="35.0" prefWidth="101.0" text="Insérer" />
+        <Button id="btnSupprBureau" fx:id="btnSupprBureau" layoutX="596.0" layoutY="388.0" mnemonicParsing="false" onAction="#handleSupprimerBureau" prefHeight="35.0" prefWidth="101.0" text="Supprimer" />
+    </children>
 </AnchorPane>

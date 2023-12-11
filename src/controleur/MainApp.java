@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controleur;
 
 import java.io.IOException;
@@ -17,14 +12,12 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import modele.*;
 
-/**
- * @author Philippe
- */
 public class MainApp extends Application
 {
+
     private Stage primaryStage;
     private Stage secondaryStage;
-    
+
     @Override
     public void start(Stage primaryStage)
     {
@@ -32,25 +25,21 @@ public class MainApp extends Application
         try
         {
             this.primaryStage.setTitle("Gestion de l'association");
-            
-            
+
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/vue/FenFXML_Menu.fxml"));
-            
-           
+
             AnchorPane rootLayout = (AnchorPane) loader.load();
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
+        } catch (IOException e)
+        {
+            System.out.println("Erreur lors du chargement de FenFXML_Menu.fxml : " + e.getMessage());
+            e.printStackTrace(); // Cela affichera la trace complète de l'exception dans la console.
         }
-       catch (IOException e) {
-    System.out.println("Erreur lors du chargement de FenFXML_Menu.fxml : " + e.getMessage());
-    e.printStackTrace(); // Cela affichera la trace complète de l'exception dans la console.
-}
     }
-    
-   
+
     // Getter et Setter pour l'item selectionné dans le tableView des sessions (fenetre Inscription)
-   
     /**
      * @param args the command line arguments
      */
@@ -58,5 +47,5 @@ public class MainApp extends Application
     {
         launch(args);
     }
-    
+
 }

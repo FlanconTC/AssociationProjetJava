@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modele;
 
 import java.sql.Date;
 
-/**
- *
- * @author Philippe
- */
 public class Membre
 {
 
@@ -50,6 +41,23 @@ public class Membre
         this.email = email;
         this.cotisation = cotisation;
         this.don = don;
+        this.recuEnvoye = recuEnvoye;
+    }
+
+    public Membre(String titre, String nom, String prenom, String adresse, String cp, String ville, String pays, Date dateVersement, String telFixe, String telPortable, String email, int cotisation, int don, String recuEnvoye)
+    {
+        this.titre = titre;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.adresse = adresse;
+        this.cp = cp;
+        this.ville = ville;
+        this.pays = pays;
+        this.dateVersement = dateVersement;
+        this.telFixe = telFixe;
+        this.telPortable = telPortable;
+        this.email = email;
+        this.cotisation = cotisation;
         this.recuEnvoye = recuEnvoye;
     }
 
@@ -202,5 +210,5 @@ public class Membre
     {
         this.recuEnvoye = recuEnvoye;
     }
-    
+
 }

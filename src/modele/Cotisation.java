@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modele;
 
-/**
- *
- * @author Rabelais
- */
 public class Cotisation
 {
 
@@ -16,7 +8,7 @@ public class Cotisation
     public Cotisation()
     {
     }
-    
+
     public Cotisation(double montant)
     {
         this.montant = montant;
@@ -31,5 +23,4 @@ public class Cotisation
     {
         this.montant = montant;
     }
-
 }

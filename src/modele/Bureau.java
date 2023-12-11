@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modele;
 
 public class Bureau
 {
-
     private int id;
     private String fonction;
     private String titre;
@@ -19,8 +13,17 @@ public class Bureau
     private String email;
     private String telPortable;
 
-    public Bureau()
+    public Bureau(String fonction, String titre, String nom, String prenom, String adresse, String cp, String ville, String email, String telPortable)
     {
+        this.fonction = fonction;
+        this.titre = titre;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.adresse = adresse;
+        this.cp = cp;
+        this.ville = ville;
+        this.email = email;
+        this.telPortable = telPortable;
     }
 
     public Bureau(int id, String fonction, String titre, String nom, String prenom, String adresse, String cp, String ville, String email, String telPortable)
@@ -136,5 +139,5 @@ public class Bureau
     {
         this.telPortable = telPortable;
     }
-    
+
 }
