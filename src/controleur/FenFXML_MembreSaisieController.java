@@ -59,7 +59,7 @@ public class FenFXML_MembreSaisieController
             String email = txtEmail.getText();
             int cotisation = Integer.parseInt(txtCotisation.getText());
             int don = 0;
-            Boolean recuEnvoye = false;
+            String recuEnvoye = "NON";
 
             Membre nouveauMembre = new Membre(titre, nom, prenom, adresse, cp, ville, pays, telFixe, telPortable, email);
             Cotiser nouvelleCotis = new Cotiser(0, nouveauMembre, dateVersement, cotisation, don, recuEnvoye);

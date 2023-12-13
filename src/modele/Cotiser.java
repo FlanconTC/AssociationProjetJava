@@ -10,13 +10,13 @@ public class Cotiser
     private Date dateVersement;
     private double cotisation;
     private double don;
-    private boolean recuEmail;
+    private String recuEmail;
 
     public Cotiser()
     {
     }
 
-    public Cotiser(int id, Membre idMembre, Date dateVersement, double cotisation, double don, boolean recuEmail)
+    public Cotiser(int id, Membre idMembre, Date dateVersement, double cotisation, double don, String recuEmail)
     {
         this.id = id;
         this.idMembre = idMembre;
@@ -76,12 +76,12 @@ public class Cotiser
         this.don = don;
     }
 
-    public boolean isRecuEmail()
+    public String isRecuEmail()
     {
         return recuEmail;
     }
 
-    public void setRecuEmail(boolean recuEmail)
+    public void setRecuEmail(String recuEmail)
     {
         this.recuEmail = recuEmail;
     }

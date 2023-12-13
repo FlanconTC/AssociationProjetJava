@@ -151,14 +151,36 @@ public class GestionSql
         }
     }
 
-    public static void creeMembre(Membre membre, Date dateVers, int cotis, int don, boolean recept)
+    public static void creeMembre(Membre membre, Date dateVers, int cotis, int don, String recept)
     {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
         try
         {
-            Connection conn = DriverManager.getConnection(url, "root", "");
-            String req = "INSERT INTO membres (titre, nom, prenom, adresse, cp, ville, pays, "
+            conn = DriverManager.getConnection(url, "root", "");
+
+            // Check if cotisation amount exceeds montant in cotisation table
+            String cotisationCheckQuery = "SELECT montant FROM cotisation";
+            pstmt = conn.prepareStatement(cotisationCheckQuery);
+            ResultSet cotisationResult = pstmt.executeQuery();
+
+            if (cotisationResult.next())
+            {
+                double montantCotisation = cotisationResult.getDouble("montant");
+
+                if (cotis > montantCotisation)
+                {
+                    // Excess amount goes to don
+                    don = cotis - (int) montantCotisation;
+                    cotis = (int) montantCotisation;
+                }
+            }
+
+            // Insert member details into membres table
+            String insertMembreQuery = "INSERT INTO membres (titre, nom, prenom, adresse, cp, ville, pays, "
                     + "telFixe, telPortable, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(req);
+            pstmt = conn.prepareStatement(insertMembreQuery);
 
             pstmt.setString(1, membre.getTitre());
             pstmt.setString(2, membre.getNom());
@@ -175,25 +197,27 @@ public class GestionSql
 
             if (rowsAffected > 0)
             {
-                showAlert("Succès", "Membre enregistré avec succès.");
-                req = "SELECT id from membres Where nom = ? and prenom = ? and email = ?";
-                pstmt = conn.prepareStatement(req);
+                // Get the ID of the newly inserted member
+                String memberIdQuery = "SELECT id FROM membres WHERE nom = ? AND prenom = ? AND email = ?";
+                pstmt = conn.prepareStatement(memberIdQuery);
                 pstmt.setString(1, membre.getNom());
                 pstmt.setString(2, membre.getPrenom());
                 pstmt.setString(3, membre.getEmail());
                 ResultSet resultSet = pstmt.executeQuery();
+
                 if (resultSet.next())
                 {
                     int memberId = resultSet.getInt("id");
 
-                    req = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES"
-                            + "(?,?,?,?,?)";
-                    pstmt = conn.prepareStatement(req);
+                    // Insert cotisation details into cotiser table
+                    String insertCotiserQuery = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES (?, ?, ?, ?, ?)";
+                    pstmt = conn.prepareStatement(insertCotiserQuery);
                     pstmt.setInt(1, memberId);
                     pstmt.setDate(2, dateVers);
                     pstmt.setInt(3, cotis);
                     pstmt.setInt(4, don);
-                    pstmt.setBoolean(5, recept);
+                    pstmt.setString(5, recept);
+
                     rowsAffected = pstmt.executeUpdate();
 
                     if (rowsAffected > 0)
@@ -208,10 +232,25 @@ public class GestionSql
             {
                 showAlert("Échec", "L'enregistrement du membre a échoué.");
             }
-            pstmt.close();
         } catch (SQLException ex)
         {
             Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, ex);
+        } finally
+        {
+            try
+            {
+                if (pstmt != null)
+                {
+                    pstmt.close();
+                }
+                if (conn != null)
+                {
+                    conn.close();
+                }
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -278,7 +317,7 @@ public class GestionSql
                 pstmt.setDate(2, dateVers);
                 int rowsAffected = pstmt.executeUpdate();
             }
-        
+
             String insertCotisationQuery = "INSERT INTO cotisation (montant) VALUES (?)";
             try (PreparedStatement pstmt = conn.prepareStatement(insertCotisationQuery))
             {
@@ -288,7 +327,7 @@ public class GestionSql
 
         } catch (SQLException e)
         {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
     }
 }
