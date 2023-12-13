@@ -13,19 +13,16 @@ public class Membre
     private String cp;
     private String ville;
     private String pays;
-    private Date dateVersement;
     private String telFixe;
     private String telPortable;
     private String email;
-    private int cotisation;
-    private int don;
-    private String recuEnvoye;
+
 
     public Membre()
     {
     }
 
-    public Membre(int id, String titre, String nom, String prenom, String adresse, String cp, String ville, String pays, Date dateVersement, String telFixe, String telPortable, String email, int cotisation, int don, String recuEnvoye)
+    public Membre(int id, String titre, String nom, String prenom, String adresse, String cp, String ville, String pays, String telFixe, String telPortable, String email)
     {
         this.id = id;
         this.titre = titre;
@@ -35,16 +32,12 @@ public class Membre
         this.cp = cp;
         this.ville = ville;
         this.pays = pays;
-        this.dateVersement = dateVersement;
         this.telFixe = telFixe;
         this.telPortable = telPortable;
         this.email = email;
-        this.cotisation = cotisation;
-        this.don = don;
-        this.recuEnvoye = recuEnvoye;
     }
 
-    public Membre(String titre, String nom, String prenom, String adresse, String cp, String ville, String pays, Date dateVersement, String telFixe, String telPortable, String email, int cotisation, int don, String recuEnvoye)
+    public Membre(String titre, String nom, String prenom, String adresse, String cp, String ville, String pays, String telFixe, String telPortable, String email)
     {
         this.titre = titre;
         this.nom = nom;
@@ -53,12 +46,9 @@ public class Membre
         this.cp = cp;
         this.ville = ville;
         this.pays = pays;
-        this.dateVersement = dateVersement;
         this.telFixe = telFixe;
         this.telPortable = telPortable;
         this.email = email;
-        this.cotisation = cotisation;
-        this.recuEnvoye = recuEnvoye;
     }
 
     public int getId()
@@ -141,16 +131,6 @@ public class Membre
         this.pays = pays;
     }
 
-    public Date getDateVersement()
-    {
-        return dateVersement;
-    }
-
-    public void setDateVersement(Date dateVersement)
-    {
-        this.dateVersement = dateVersement;
-    }
-
     public String getTelFixe()
     {
         return telFixe;
@@ -180,35 +160,4 @@ public class Membre
     {
         this.email = email;
     }
-
-    public int getCotisation()
-    {
-        return cotisation;
-    }
-
-    public void setCotisation(int cotisation)
-    {
-        this.cotisation = cotisation;
-    }
-
-    public int getDon()
-    {
-        return don;
-    }
-
-    public void setDon(int don)
-    {
-        this.don = don;
-    }
-
-    public String getRecuEnvoye()
-    {
-        return recuEnvoye;
-    }
-
-    public void setRecuEnvoye(String recuEnvoye)
-    {
-        this.recuEnvoye = recuEnvoye;
-    }
-
 }

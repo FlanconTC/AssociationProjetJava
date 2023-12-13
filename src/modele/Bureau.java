@@ -140,4 +140,10 @@ public class Bureau
         this.telPortable = telPortable;
     }
 
+    @Override
+    public String toString()
+    {
+        return fonction;
+    }
+
 }

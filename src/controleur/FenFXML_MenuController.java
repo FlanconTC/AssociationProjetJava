@@ -60,7 +60,21 @@ public class FenFXML_MenuController implements Initializable
     @FXML
     private void lancerFenetreRecu()
     {
-
+        try
+        {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/vue/FenFXML_Recu.fxml"));
+            AnchorPane rootLayout = loader.load();
+            Scene scene = new Scene(rootLayout);
+            Stage newStage = new Stage();
+            newStage.setTitle("Écran gestion reçus");
+            newStage.setScene(scene);
+            newStage.show();
+        } 
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }

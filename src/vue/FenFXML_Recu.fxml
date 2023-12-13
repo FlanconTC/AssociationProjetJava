@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="351.0" prefWidth="729.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.FenFXML_RecuController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Liste des membres sans reçu :" underline="true">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="49.0" text="Sélectionnez les membres à qui vous voulez envoyer un reçu." />
+      <TableView id="tableMembresNonRecu" fx:id="tableMembresNonRecu" layoutX="13.0" layoutY="88.0" prefHeight="200.0" prefWidth="692.0">
+        <columns>
+          <TableColumn id="tblCid" fx:id="tblCid" prefWidth="50.0" text="ID" />
+          <TableColumn id="tblCtitre" fx:id="tblCtitre" prefWidth="82.0" text="Titre" />
+            <TableColumn id="tblCnom" fx:id="tblCnom" prefWidth="93.0" text="Nom" />
+            <TableColumn id="tblCprenom" fx:id="tblCprenom" prefWidth="75.0" text="Prénom" />
+            <TableColumn id="tblCadresse" fx:id="tblCadresse" prefWidth="75.0" text="Adresse" />
+            <TableColumn id="tblCcp" fx:id="tblCcp" prefWidth="75.0" text="CP" />
+            <TableColumn id="tblCville" fx:id="tblCville" prefWidth="75.0" text="Ville" />
+            <TableColumn id="tblCmail" fx:id="tblCmail" minWidth="0.0" prefWidth="88.0" text="Mail" />
+            <TableColumn id="tblCrecu" fx:id="tblCrecu" minWidth="0.0" prefWidth="78.0" text="Reçu" />
+        </columns>
+      </TableView>
+      <Label layoutX="13.0" layoutY="316.0" text="Fonction du ou de la signataire :" />
+      <ChoiceBox id="cbbxSignataire" fx:id="cbbxSignataire" layoutX="209.0" layoutY="312.0" prefWidth="150.0" />
+      <Button id="btnRecus" fx:id="btnRecus" layoutX="414.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnRecuClic" prefHeight="25.0" prefWidth="293.0" text="Édition des reçus et envoi par mail" />
+   </children>
+</AnchorPane>

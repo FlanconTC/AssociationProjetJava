@@ -8,6 +8,7 @@ import modele.GestionSql;
 import modele.Membre;
 
 import java.sql.Date;
+import modele.Cotiser;
 
 public class FenFXML_MembreSaisieController
 {
@@ -58,11 +59,11 @@ public class FenFXML_MembreSaisieController
             String email = txtEmail.getText();
             int cotisation = Integer.parseInt(txtCotisation.getText());
             int don = 0;
-            String recuEnvoye = "NON";
+            Boolean recuEnvoye = false;
 
-            Membre nouveauMembre = new Membre(titre, nom, prenom, adresse, cp, ville, pays, dateVersement, telFixe, telPortable, email, cotisation, don, recuEnvoye);
-
-            GestionSql.creeMembre(nouveauMembre);
+            Membre nouveauMembre = new Membre(titre, nom, prenom, adresse, cp, ville, pays, telFixe, telPortable, email);
+            Cotiser nouvelleCotis = new Cotiser(0, nouveauMembre, dateVersement, cotisation, don, recuEnvoye);
+            GestionSql.creeMembre(nouveauMembre,dateVersement, cotisation, don, recuEnvoye );
 
             txtTitre.clear();
             txtNom.clear();
