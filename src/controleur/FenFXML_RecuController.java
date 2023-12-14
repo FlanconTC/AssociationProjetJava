@@ -95,7 +95,6 @@ public class FenFXML_RecuController implements Initializable
             membresSelectionnes.clear();
             membresSelectionnes.addAll(change.getList());
         });
-
     }
 
     public void btnRecuClic(ActionEvent event)

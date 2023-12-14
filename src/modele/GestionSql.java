@@ -1,62 +1,84 @@
 package modele;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.sql.PreparedStatement;
-import java.sql.Date;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 public class GestionSql
 {
-
-    static String pilote = "com.mysql.cj.jdbc.Driver";
-    static String url = "jdbc:mysql://localhost/association?characterEncoding=UTF8";
+    private static final String url = "jdbc:mysql://localhost/association?characterEncoding=UTF8";
 
     public static ObservableList<Bureau> getMembresBureau()
     {
-        Connection conn;
-        Statement stmt1;
-        Bureau membreBureau;
         ObservableList<Bureau> lesMembres = FXCollections.observableArrayList();
-        try
-        {
-            Class.forName(pilote);
-            conn = DriverManager.getConnection(url, "root", "");
-            stmt1 = conn.createStatement();
+        String req = "SELECT b.id, b.fonction, b.titre, b.nom, b.prenom, b.adresse, b.cp, b.ville, b.email, b.telPortable FROM bureau b;";
 
-            String req = "select b.id, b.fonction, b.titre, b.nom, b.prenom, b.adresse, b.cp, b.ville, b.email, b.telPortable from bureau b;";
-            ResultSet rs = stmt1.executeQuery(req);
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(req))
+        {
+
             while (rs.next())
             {
-                membreBureau = new Bureau(rs.getInt("id"), rs.getString("fonction"), rs.getString("titre"), rs.getString("nom"), rs.getString("prenom"), rs.getString("adresse"), rs.getString("cp"), rs.getString("ville"), rs.getString("email"), rs.getString("telPortable"));
+                Bureau membreBureau = new Bureau(
+                        rs.getInt("id"),
+                        rs.getString("fonction"),
+                        rs.getString("titre"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("adresse"),
+                        rs.getString("cp"),
+                        rs.getString("ville"),
+                        rs.getString("email"),
+                        rs.getString("telPortable")
+                );
                 lesMembres.add(membreBureau);
             }
-        } catch (ClassNotFoundException cnfe)
-        {
-            System.out.println("Erreur chargement driver getLesClients : " + cnfe.getMessage());
         } catch (SQLException se)
         {
-            System.out.println("Erreur SQL requete getLesClients : " + se.getMessage());
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
+        }
+        return lesMembres;
+    }
+
+    public static ObservableList<Membre> getMembres()
+    {
+        ObservableList<Membre> lesMembres = FXCollections.observableArrayList();
+        String req = "SELECT m.id, m.titre, m.nom, m.prenom, m.adresse, m.cp, m.ville, m.pays, m.telFixe, m.telPortable, m.email FROM membres m;";
+
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(req))
+        {
+
+            while (rs.next())
+            {
+                Membre membre = new Membre(
+                        rs.getInt("id"),
+                        rs.getString("titre"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("adresse"),
+                        rs.getString("cp"),
+                        rs.getString("ville"),
+                        rs.getString("pays"),
+                        rs.getString("telFixe"),
+                        rs.getString("telPortable"),
+                        rs.getString("email")
+                );
+                lesMembres.add(membre);
+            }
+        } catch (SQLException se)
+        {
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
         }
         return lesMembres;
     }
 
     public static void modifierMembreBureau(Bureau membreBureau)
     {
-        try
+        String req = "UPDATE bureau SET fonction=?, titre=?, nom=?, prenom=?, adresse=?, cp=?, ville=?, email=?, telPortable=? WHERE id=?";
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(req))
         {
-            Connection conn = DriverManager.getConnection(url, "root", "");
-            String req = "UPDATE bureau SET fonction=?, titre=?, nom=?, prenom=?, adresse=?, cp=?, ville=?, "
-                    + "email=?, telPortable=? WHERE id=?";
-            PreparedStatement pstmt = conn.prepareStatement(req);
 
             pstmt.setString(1, membreBureau.getFonction());
             pstmt.setString(2, membreBureau.getTitre());
@@ -73,28 +95,22 @@ public class GestionSql
 
             if (rowsAffected > 0)
             {
-                showAlert("Succès", "Modification effectuer avec succès.");
+                showAlert("Succès", "Modification effectuée avec succès.");
             } else
             {
-                showAlert("Échec", "Modification échoué.");
+                showAlert("Échec", "La modification a échoué.");
             }
-
-            pstmt.close();
-            conn.close();
         } catch (SQLException se)
         {
-            System.out.println("Erreur SQL modification membre du bureau : " + se.getMessage());
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
         }
     }
 
     public static void insertMembreBureau(Bureau membreBureau)
     {
-        try
+        String req = "INSERT INTO bureau (fonction, titre, nom, prenom, adresse, cp, ville, email, telPortable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(req))
         {
-            Connection conn = DriverManager.getConnection(url, "root", "");
-            String req = "INSERT INTO bureau (fonction, titre, nom, prenom, adresse, cp, ville, email, telPortable) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(req);
 
             pstmt.setString(1, membreBureau.getFonction());
             pstmt.setString(2, membreBureau.getTitre());
@@ -110,78 +126,67 @@ public class GestionSql
 
             if (rowsAffected > 0)
             {
-                showAlert("Succès", "Insertion effectuer avec succès.");
+                showAlert("Succès", "Insertion effectuée avec succès.");
             } else
             {
-                showAlert("Échec", "Insertion échoué.");
+                showAlert("Échec", "L'insertion a échoué.");
             }
-
-            pstmt.close();
-            conn.close();
         } catch (SQLException se)
         {
-            System.out.println("Erreur SQL insertion membre du bureau : " + se.getMessage());
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
         }
     }
 
     public static void deleteMembreBureau(int idMembre)
     {
-        try
+        String req = "DELETE FROM bureau WHERE id=?";
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(req))
         {
-            Connection conn = DriverManager.getConnection(url, "root", "");
-            String req = "DELETE FROM bureau WHERE id=?";
-            PreparedStatement pstmt = conn.prepareStatement(req);
             pstmt.setInt(1, idMembre);
 
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0)
             {
-                showAlert("Succès", "Supprimer avec succès.");
+                showAlert("Succès", "Membre du bureau supprimé avec succès.");
             } else
             {
-                showAlert("Échec", "La suppression a échoué.");
+                showAlert("Échec", "La suppression du membre du bureau a échoué.");
             }
-
-            pstmt.close();
-            conn.close();
         } catch (SQLException se)
         {
-            System.out.println("Erreur SQL suppression membre : " + se.getMessage());
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
         }
     }
 
     public static void creeMembre(Membre membre, Date dateVers, int cotis, int don, String recept)
     {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try
+        try (Connection conn = DriverManager.getConnection(url, "root", ""))
         {
-            conn = DriverManager.getConnection(url, "root", "");
+            conn.setAutoCommit(false);
 
-            // Check if cotisation amount exceeds montant in cotisation table
-            String cotisationCheckQuery = "SELECT montant FROM cotisation";
-            pstmt = conn.prepareStatement(cotisationCheckQuery);
-            ResultSet cotisationResult = pstmt.executeQuery();
-
-            if (cotisationResult.next())
+            int memberId = insertMembre(conn, membre);
+            if (memberId > 0)
             {
-                double montantCotisation = cotisationResult.getDouble("montant");
-
-                if (cotis > montantCotisation)
-                {
-                    // Excess amount goes to don
-                    don = cotis - (int) montantCotisation;
-                    cotis = (int) montantCotisation;
-                }
+                adjustCotisationAndDon(conn, memberId, dateVers, cotis, don, recept);
+                conn.commit();
+                showAlert("Échec", "Creation du membre reussi.");
+            } else
+            {
+                conn.rollback();
+                showAlert("Échec", "L'enregistrement du membre a échoué.");
             }
+        } catch (SQLException se)
+        {
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
+        }
+    }
 
-            // Insert member details into membres table
-            String insertMembreQuery = "INSERT INTO membres (titre, nom, prenom, adresse, cp, ville, pays, "
-                    + "telFixe, telPortable, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            pstmt = conn.prepareStatement(insertMembreQuery);
-
+    private static int insertMembre(Connection conn, Membre membre) throws SQLException
+    {
+        String insertMembreQuery = "INSERT INTO membres (titre, nom, prenom, adresse, cp, ville, pays, telFixe, telPortable, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertMembreQuery, Statement.RETURN_GENERATED_KEYS))
+        {
             pstmt.setString(1, membre.getTitre());
             pstmt.setString(2, membre.getNom());
             pstmt.setString(3, membre.getPrenom());
@@ -194,62 +199,57 @@ public class GestionSql
             pstmt.setString(10, membre.getEmail());
 
             int rowsAffected = pstmt.executeUpdate();
-
             if (rowsAffected > 0)
             {
-                // Get the ID of the newly inserted member
-                String memberIdQuery = "SELECT id FROM membres WHERE nom = ? AND prenom = ? AND email = ?";
-                pstmt = conn.prepareStatement(memberIdQuery);
-                pstmt.setString(1, membre.getNom());
-                pstmt.setString(2, membre.getPrenom());
-                pstmt.setString(3, membre.getEmail());
-                ResultSet resultSet = pstmt.executeQuery();
-
-                if (resultSet.next())
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys())
                 {
-                    int memberId = resultSet.getInt("id");
-
-                    // Insert cotisation details into cotiser table
-                    String insertCotiserQuery = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES (?, ?, ?, ?, ?)";
-                    pstmt = conn.prepareStatement(insertCotiserQuery);
-                    pstmt.setInt(1, memberId);
-                    pstmt.setDate(2, dateVers);
-                    pstmt.setInt(3, cotis);
-                    pstmt.setInt(4, don);
-                    pstmt.setString(5, recept);
-
-                    rowsAffected = pstmt.executeUpdate();
-
-                    if (rowsAffected > 0)
+                    if (generatedKeys.next())
                     {
-                        showAlert("Succès", "Membre enregistré avec succès.");
-                    } else
-                    {
-                        showAlert("Échec", "L'enregistrement du membre a échoué.");
+                        return generatedKeys.getInt(1);
                     }
                 }
+            }
+        }
+        return -1;
+    }
+
+    private static void adjustCotisationAndDon(Connection conn, int memberId, Date dateVers, int cotis, int don, String recept) throws SQLException
+    {
+        double montantCotisation = getMontantCotisation(conn);
+        if (cotis > montantCotisation)
+        {
+            don += cotis - montantCotisation;
+            cotis = (int) montantCotisation;
+        }
+
+        String insertCotiserQuery = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertCotiserQuery))
+        {
+            pstmt.setInt(1, memberId);
+            pstmt.setDate(2, dateVers);
+            pstmt.setInt(3, cotis);
+            pstmt.setInt(4, don);
+            pstmt.setString(5, recept);
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected == 0)
+            {
+                throw new SQLException("L'insertion des données de cotisation a échoué.");
+            }
+        }
+    }
+
+    private static double getMontantCotisation(Connection conn) throws SQLException
+    {
+        String cotisationCheckQuery = "SELECT montant FROM cotisation";
+        try (PreparedStatement pstmt = conn.prepareStatement(cotisationCheckQuery); ResultSet cotisationResult = pstmt.executeQuery())
+        {
+            if (cotisationResult.next())
+            {
+                return cotisationResult.getDouble("montant");
             } else
             {
-                showAlert("Échec", "L'enregistrement du membre a échoué.");
-            }
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, ex);
-        } finally
-        {
-            try
-            {
-                if (pstmt != null)
-                {
-                    pstmt.close();
-                }
-                if (conn != null)
-                {
-                    conn.close();
-                }
-            } catch (SQLException e)
-            {
-                e.printStackTrace();
+                return 0;
             }
         }
     }
@@ -266,68 +266,77 @@ public class GestionSql
     public static ObservableList<MembreSansRecu> getMembresNonRecu()
     {
         ObservableList<MembreSansRecu> lesMembresSansRecu = FXCollections.observableArrayList();
+        String req = "SELECT m.id, m.titre, m.nom, m.prenom, m.adresse, m.cp, m.ville, m.email, c.cotisation, c.dateVersement, c.recuEmail FROM membres m, cotiser c WHERE m.id = c.idMembre AND c.recuEmail = ?";
 
-        try
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(req))
         {
-            Connection conn = DriverManager.getConnection(url, "root", "");
-            String req = "SELECT m.id, m.titre, m.nom, m.prenom, m.adresse, m.cp, m.ville, m.email, c.cotisation, c.dateVersement, c.recuEmail from membres m, cotiser c\n"
-                    + "where m.id = c.idMembre and c.recuEmail = ?";
-            PreparedStatement pstmt = conn.prepareStatement(req);
+
             pstmt.setString(1, "NON");
-            ResultSet resultSet = pstmt.executeQuery();
-
-            while (resultSet.next())
+            try (ResultSet resultSet = pstmt.executeQuery())
             {
-                MembreSansRecu membreSansRecu = new MembreSansRecu(
-                        resultSet.getInt("id"),
-                        resultSet.getString("titre"),
-                        resultSet.getString("nom"),
-                        resultSet.getString("prenom"),
-                        resultSet.getString("adresse"),
-                        resultSet.getString("CP"),
-                        resultSet.getString("ville"),
-                        resultSet.getString("email"),
-                        resultSet.getInt("cotisation"),
-                        resultSet.getDate("dateVersement"),
-                        resultSet.getString("recuEmail")
-                );
-                System.out.println(membreSansRecu.getMail());
-                lesMembresSansRecu.add(membreSansRecu);
+                while (resultSet.next())
+                {
+                    MembreSansRecu membreSansRecu = new MembreSansRecu(
+                            resultSet.getInt("id"),
+                            resultSet.getString("titre"),
+                            resultSet.getString("nom"),
+                            resultSet.getString("prenom"),
+                            resultSet.getString("adresse"),
+                            resultSet.getString("CP"),
+                            resultSet.getString("ville"),
+                            resultSet.getString("email"),
+                            resultSet.getInt("cotisation"),
+                            resultSet.getDate("dateVersement"),
+                            resultSet.getString("recuEmail")
+                    );
+                    lesMembresSansRecu.add(membreSansRecu);
+                }
             }
-            resultSet.close();
-            pstmt.close();
-            conn.close();
 
-        } catch (SQLException ex)
+        } catch (SQLException se)
         {
-            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
         }
         return lesMembresSansRecu;
     }
 
     public static void validerRecu(int id, Date dateVers, int cotis)
     {
-        try
+        String updateRecuEmailQuery = "UPDATE cotiser SET recuEmail = 'OUI' WHERE idMembre = ? AND dateVersement = ?";
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(updateRecuEmailQuery))
         {
-            Connection conn = DriverManager.getConnection(url, "root", "");
-            String updateRecuEmailQuery = "UPDATE cotiser SET recuEmail = 'OUI' WHERE idMembre = ? AND dateVersement = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(updateRecuEmailQuery))
-            {
-                pstmt.setInt(1, id);
-                pstmt.setDate(2, dateVers);
-                int rowsAffected = pstmt.executeUpdate();
-            }
 
-            String insertCotisationQuery = "INSERT INTO cotisation (montant) VALUES (?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(insertCotisationQuery))
-            {
-                pstmt.setInt(1, cotis);
-                int rowsAffected = pstmt.executeUpdate();
-            }
+            pstmt.setInt(1, id);
+            pstmt.setDate(2, dateVers);
 
-        } catch (SQLException e)
+            pstmt.executeUpdate();
+        } catch (SQLException se)
         {
-            e.printStackTrace();
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
+        }
+    }
+
+    public static void insererDon(int idMembre, String montantDon)
+    {
+        String req = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES (?, NOW(), 0, ?, 'NON');";
+        try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(req))
+        {
+
+            pstmt.setInt(1, idMembre);
+            pstmt.setString(2, montantDon);
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0)
+            {
+                showAlert("Succès", "Don enregistré avec succès.");
+            } else
+            {
+                showAlert("Échec", "Le don a échoué.");
+            }
+        } catch (SQLException se)
+        {
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
         }
     }
 }
