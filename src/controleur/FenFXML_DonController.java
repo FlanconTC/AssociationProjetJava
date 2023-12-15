@@ -76,9 +76,9 @@ public class FenFXML_DonController implements Initializable
     private void handleDonAction()
     {
         Membre membreSelectionne = comboMembres.getSelectionModel().getSelectedItem();
-        String montantDon = txtDon.getText();
+        double montantDon = Double.parseDouble(txtDon.getText());
 
-        if (membreSelectionne != null && montantDon != null)
+        if (membreSelectionne != null && montantDon > 0)
         {
             GestionSql.insererDon(membreSelectionne.getId(), montantDon);
         }

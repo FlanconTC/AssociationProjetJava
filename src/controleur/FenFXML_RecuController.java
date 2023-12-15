@@ -132,15 +132,18 @@ public class FenFXML_RecuController implements Initializable
                             contentStream.newLine();
                             contentStream.showText(unMembre.getAdresse() + " " + unMembre.getCP() + " " + unMembre.getVille());
                             contentStream.newLine();
-                            contentStream.showText("un don d'une valeur de " + unMembre.getCotisation() + " le " + unMembre.getDateVers().toString());
+                            contentStream.showText("un don d'une valeur de " + unMembre.getDon() + " le " + unMembre.getDateVers().toString());
                             yPosition -= 15;
                             contentStream.endText();
                         }
 
                         FileChooser fileChooser = new FileChooser();
-                        fileChooser.setInitialFileName("ListeEmargement_Session_" + unMembre.getPrenom() + unMembre.getNom() + unMembre.getVille() + ".pdf");
+                        fileChooser.setInitialFileName("Recu_ATG_" + unMembre.getPrenom() + unMembre.getNom() + unMembre.getVille() + ".pdf");
                         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-
+                        
+                        File downloadDirectory = new File(System.getProperty("user.home") + "/Downloads");
+                        fileChooser.setInitialDirectory(downloadDirectory);
+                        
                         Stage stage = (Stage) tableMembresNonRecu.getScene().getWindow();
                         File file = fileChooser.showSaveDialog(stage);
 
@@ -182,7 +185,7 @@ public class FenFXML_RecuController implements Initializable
                             Multipart multipart = new MimeMultipart();
                             multipart.addBodyPart(attachmentBodyPart);
                             message.setContent(multipart);
-                           // Transport.send(message);  // comme d'hab ça marche pas #super :)) (firewall)
+                            // Transport.send(message);  // comme d'hab ça marche pas #super :)) (firewall)
                         } catch (MessagingException e)
                         {
                             e.printStackTrace();

@@ -4,13 +4,15 @@ import java.sql.Date;
 
 public class MembreSansRecu
 {
+
     private int id;
     private String Titre, Nom, Prenom, Adresse, CP, Ville, Mail;
     private int cotisation;
     private Date dateVers;
+    private double don;
     private String recu;
 
-    public MembreSansRecu(int id, String Titre, String Nom, String Prenom, String Adresse, String CP, String Ville, String Mail, int cotisation, Date dateVers, String recu)
+    public MembreSansRecu(int id, String Titre, String Nom, String Prenom, String Adresse, String CP, String Ville, String Mail, int cotisation, Date dateVers, double don, String recu)
     {
         this.id = id;
         this.Titre = Titre;
@@ -22,6 +24,7 @@ public class MembreSansRecu
         this.Mail = Mail;
         this.cotisation = cotisation;
         this.dateVers = dateVers;
+        this.don = don;
         this.recu = recu;
     }
 
@@ -35,6 +38,16 @@ public class MembreSansRecu
         this.cotisation = cotisation;
     }
 
+    public double getDon()
+    {
+        return don;
+    }
+
+    public void setDon(double don)
+    {
+        this.don = don;
+    }
+
     public Date getDateVers()
     {
         return dateVers;
@@ -44,9 +57,6 @@ public class MembreSansRecu
     {
         this.dateVers = dateVers;
     }
-    
-
-   
 
     public int getId()
     {
@@ -137,5 +147,5 @@ public class MembreSansRecu
     {
         this.recu = recu;
     }
-    
+
 }

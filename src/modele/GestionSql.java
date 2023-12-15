@@ -1,6 +1,7 @@
 package modele;
 
 import java.sql.*;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -175,8 +176,7 @@ public class GestionSql
             } else if (memberId == 0)
             {
                 showAlert("Échec", "L'enregistrement du membre a échoué car il existe deja une personne avec ce nom et prenom.");
-            }
-            else
+            } else
             {
                 conn.rollback();
                 showAlert("Échec", "L'enregistrement du membre a échoué.");
@@ -205,7 +205,6 @@ public class GestionSql
             }
         }
 
-        // Si le membre n'existe pas encore, insérez-le
         String insertMembreQuery = "INSERT INTO membres (titre, nom, prenom, adresse, cp, ville, pays, telFixe, telPortable, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertMembreQuery, Statement.RETURN_GENERATED_KEYS))
         {
@@ -242,6 +241,11 @@ public class GestionSql
         {
             don += cotis - montantCotisation;
             cotis = (int) montantCotisation;
+        }
+
+        if (don == 0)
+        {
+            recept = "OUI"; //pas de recu pour les cotisations
         }
 
         String insertCotiserQuery = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES (?, ?, ?, ?, ?)";
@@ -288,7 +292,7 @@ public class GestionSql
     public static ObservableList<MembreSansRecu> getMembresNonRecu()
     {
         ObservableList<MembreSansRecu> lesMembresSansRecu = FXCollections.observableArrayList();
-        String req = "SELECT m.id, m.titre, m.nom, m.prenom, m.adresse, m.cp, m.ville, m.email, c.cotisation, c.dateVersement, c.recuEmail FROM membres m, cotiser c WHERE m.id = c.idMembre AND c.recuEmail = ?";
+        String req = "SELECT m.id, m.titre, m.nom, m.prenom, m.adresse, m.cp, m.ville, m.email, c.cotisation, c.dateVersement, c.don, c.recuEmail FROM membres m, cotiser c WHERE m.id = c.idMembre AND c.recuEmail = ?";
 
         try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(req))
         {
@@ -309,6 +313,7 @@ public class GestionSql
                             resultSet.getString("email"),
                             resultSet.getInt("cotisation"),
                             resultSet.getDate("dateVersement"),
+                            resultSet.getDouble("don"),
                             resultSet.getString("recuEmail")
                     );
                     lesMembresSansRecu.add(membreSansRecu);
@@ -338,27 +343,71 @@ public class GestionSql
         }
     }
 
-    public static void insererDon(int idMembre, String montantDon)
+    public static void insererDon(int idMembre, double montantDon)
     {
-        String req = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES (?, NOW(), 0, ?, 'NON');";
-        try (Connection conn = DriverManager.getConnection(url, "root", ""); PreparedStatement pstmt = conn.prepareStatement(req))
+        try (Connection conn = DriverManager.getConnection(url, "root", ""))
         {
+            double montantCotisation = 0;
 
+            if (!cotisationAnnee(conn, idMembre))
+            {
+                montantCotisation = getMontantCotisation(conn);
+
+                if (montantDon < montantCotisation + 1)
+                {
+                    showAlert("Erreur", "Le montant du don doit être au moins 1 euro au dessus du montant de la cotisation, qui est de " + montantCotisation + " euros.");
+                    return;
+                }
+
+                montantDon -= montantCotisation;
+            }
+
+            insererCotisationEtDon(conn, idMembre, montantCotisation, montantDon);
+        } catch (SQLException | NumberFormatException e)
+        {
+            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    private static void insererCotisationEtDon(Connection conn, int idMembre, double montantCotisation, double montantDon) throws SQLException
+    {
+        String req = "INSERT INTO cotiser (idMembre, dateVersement, cotisation, don, recuEmail) VALUES (?, NOW(), ?, ?, 'NON');";
+        try (PreparedStatement pstmt = conn.prepareStatement(req))
+        {
             pstmt.setInt(1, idMembre);
-            pstmt.setString(2, montantDon);
+            pstmt.setDouble(2, montantCotisation);
+            pstmt.setDouble(3, montantDon);
 
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0)
             {
-                showAlert("Succès", "Don enregistré avec succès.");
+                showAlert("Succès", "Don et cotisation enregistrés avec succès.");
             } else
             {
-                showAlert("Échec", "Le don a échoué.");
+                showAlert("Échec", "L'enregistrement a échoué.");
             }
-        } catch (SQLException se)
-        {
-            Logger.getLogger(GestionSql.class.getName()).log(Level.SEVERE, null, se);
         }
+    }
+
+    private static boolean cotisationAnnee(Connection conn, int memberId) throws SQLException
+    {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        String query = "SELECT COUNT(*) FROM cotiser WHERE idMembre = ? AND YEAR(dateVersement) = ? AND cotisation > 0";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query))
+        {
+            pstmt.setInt(1, memberId);
+            pstmt.setInt(2, currentYear);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next())
+            {
+                return rs.getInt(1) > 0;
+            }
+        }
+
+        return false;
     }
 }
