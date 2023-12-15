@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 
 public class GestionSql
 {
+
     private static final String url = "jdbc:mysql://localhost/association?characterEncoding=UTF8";
 
     public static ObservableList<Bureau> getMembresBureau()
@@ -170,8 +171,12 @@ public class GestionSql
             {
                 adjustCotisationAndDon(conn, memberId, dateVers, cotis, don, recept);
                 conn.commit();
-                showAlert("Échec", "Creation du membre reussi.");
-            } else
+                showAlert("Succès", "Creation du membre reussi.");
+            } else if (memberId == 0)
+            {
+                showAlert("Échec", "L'enregistrement du membre a échoué car il existe deja une personne avec ce nom et prenom.");
+            }
+            else
             {
                 conn.rollback();
                 showAlert("Échec", "L'enregistrement du membre a échoué.");
@@ -184,6 +189,23 @@ public class GestionSql
 
     private static int insertMembre(Connection conn, Membre membre) throws SQLException
     {
+        String checkIfExistsQuery = "SELECT id FROM membres WHERE nom = ? AND prenom = ?";
+
+        // Vérifier si un membre avec le même nom et prénom existe déjà
+        try (PreparedStatement checkIfExistsStmt = conn.prepareStatement(checkIfExistsQuery))
+        {
+            checkIfExistsStmt.setString(1, membre.getNom());
+            checkIfExistsStmt.setString(2, membre.getPrenom());
+
+            ResultSet resultSet = checkIfExistsStmt.executeQuery();
+
+            if (resultSet.next())
+            {
+                return 0;
+            }
+        }
+
+        // Si le membre n'existe pas encore, insérez-le
         String insertMembreQuery = "INSERT INTO membres (titre, nom, prenom, adresse, cp, ville, pays, telFixe, telPortable, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertMembreQuery, Statement.RETURN_GENERATED_KEYS))
         {
