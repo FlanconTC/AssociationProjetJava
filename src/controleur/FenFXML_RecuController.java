@@ -37,6 +37,7 @@ import javax.mail.internet.MimeMultipart;
 import modele.Bureau;
 import modele.GestionSql;
 import modele.MembreSansRecu;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 public class FenFXML_RecuController implements Initializable
 {
@@ -114,39 +115,43 @@ public class FenFXML_RecuController implements Initializable
                         document.addPage(page);
 
                         try (PDPageContentStream contentStream = new PDPageContentStream(document, page))
-                        {
-
-                            float yStart = 725;
-                            float yPosition = yStart;
-
-                            contentStream.beginText();
-                            contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-                            contentStream.setLeading(14.5f);
-                            contentStream.newLineAtOffset(25, yPosition);
-                            contentStream.showText("Je soussigné.e " + signataire.getPrenom() + " " + signataire.getNom() + ", ");
-                            contentStream.newLine();
-                            contentStream.showText(signataire.getFonction() + " de l'association AUTISME TREGOR GOELO");
-                            contentStream.newLine();
-                            contentStream.showText("Déclare avoir reçu de " + unMembre.getTitre() + " " + unMembre.getNom()
-                                    + " " + unMembre.getPrenom());
-                            contentStream.newLine();
-                            contentStream.showText(unMembre.getAdresse() + " " + unMembre.getCP() + " " + unMembre.getVille());
-                            contentStream.newLine();
-                            contentStream.showText("un don d'une valeur de " + unMembre.getDon() + " le " + unMembre.getDateVers().toString());
-                            yPosition -= 15;
-                            contentStream.endText();
-                        }
-
+                        {                 
+                        float yStart = 725;
+                        float yPosition = yStart;
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(30, yPosition);
+                        contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+                        contentStream.setLeading(14.5f);
+                        contentStream.setFont(PDType1Font.TIMES_BOLD, 24);
+                        contentStream.showText("                            RECU FISCAL 2023");
+                        yPosition -= 15;
+                        contentStream.newLine();
+                        contentStream.newLine();
+                        contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+                        contentStream.showText("    Je soussigné.e " + signataire.getPrenom() + " " + signataire.getNom() + ", ");
+                        contentStream.newLine();
+                        contentStream.showText("    "+signataire.getFonction() + " de l'association AUTISME TREGOR GOELO");
+                        contentStream.newLine();
+                        contentStream.newLine();
+                        contentStream.showText("                    "+unMembre.getAdresse());
+                        contentStream.newLine();
+                        contentStream.showText("                    "+unMembre.getCP());
+                        contentStream.newLine();
+                        contentStream.showText("                    "+unMembre.getVille());
+                        contentStream.newLine();
+                        yPosition -= 15;
+                        contentStream.newLine();
+                        contentStream.showText("    un don d'une valeur de " + unMembre.getDon() + "€ le " + unMembre.getDateVers().toString()+".");
+                        yPosition -= 15;
+                        contentStream.endText(); 
+                        }                    
                         FileChooser fileChooser = new FileChooser();
                         fileChooser.setInitialFileName("Recu_ATG_" + unMembre.getPrenom() + unMembre.getNom() + unMembre.getVille() + ".pdf");
-                        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-                        
+                        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));                   
                         File downloadDirectory = new File(System.getProperty("user.home") + "/Downloads");
-                        fileChooser.setInitialDirectory(downloadDirectory);
-                        
+                        fileChooser.setInitialDirectory(downloadDirectory);                     
                         Stage stage = (Stage) tableMembresNonRecu.getScene().getWindow();
                         File file = fileChooser.showSaveDialog(stage);
-
                         if (file != null)
                         {
                             document.save(file);
